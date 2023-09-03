@@ -69,7 +69,7 @@ class SurveyController extends Controller
      */
     public function showForGuest(Survey $survey)
     {
-        if (!$survey->isActive())
+        if (!$survey->isActive() || $survey->expired())
         {
             return response([
                 'message' => 'Sorry, Survey not available now.',
@@ -200,7 +200,7 @@ class SurveyController extends Controller
         $relativePath = $dir . $file;
         if (!File::exists($absolutePath))
         {
-            File::makeDirectory($absolutePath, 0755);
+            File::makeDirectory($absolutePath, 0755, true);
         }
         file_put_contents($relativePath, $image);
         return $relativePath;

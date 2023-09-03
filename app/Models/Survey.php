@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
@@ -23,6 +24,10 @@ class Survey extends Model
     public function isActive()
     {
         return $this->status;
+    }
+    public function expired()
+    {
+        return Carbon::parse($this->expire_date)->format('Y-m-d') <= today();
     }
 
     public function questions()
