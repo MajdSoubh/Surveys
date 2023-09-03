@@ -5,16 +5,18 @@
             Sorry, Survey not available now.
         </div>
         <form @submit.prevent="submitSurvey" v-else>
-            <div class="grid grid-cols-5 items-center gap-6">
+            <div class="grid grid-cols-5 gap-6">
                 <img
                     :src="
                         survey.image_url ||
                         'https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg'
                     "
-                    class="w-full h-48 object-cover rounded"
+                    class="w-full h-48 object-cover rounded col-span-5 md:col-span-2 lg:col-span-1"
                     :alt="survey.title"
                 />
-                <div class="col-span-4">
+                <div
+                    class="col-span-5 md:col-span-3 lg:col-span-4 text-center md:text-start"
+                >
                     <h1 class="font-medium text-2xl">{{ survey.title }}</h1>
                     <div
                         v-html="survey.description"

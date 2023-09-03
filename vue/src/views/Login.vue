@@ -136,7 +136,7 @@ const user = {
 const store = useStore();
 const router = useRouter();
 const loading = ref(false);
-console.log(store.state.user);
+
 function login() {
     loading.value = true;
     store
