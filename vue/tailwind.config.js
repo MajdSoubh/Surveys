@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    content: ["index,html", "./src/**/*.{vue,ts,jsx,html,js}"],
+    darkMode: "class",
+    content: ["index.html", "./src/**/*.{vue,ts,jsx,html,js}"],
     theme: {
         extend: {
             keyframes: {
