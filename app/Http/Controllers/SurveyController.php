@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAnswerRequest;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Http\Resources\SurveyResource;
-use App\Models\Answer;
-use App\Models\Submission;
 use App\Models\Question;
 use Exception;
 use Illuminate\Support\Arr;
@@ -23,7 +20,7 @@ class SurveyController extends Controller
     public function index()
     {
         $user = Auth()->user();
-        return SurveyResource::collection(Survey::where('user_id', $user->id)->paginate(6));
+        return SurveyResource::collection(Survey::where('user_id', $user->id)->latest()->paginate(6));
     }
 
     /**
@@ -149,6 +146,8 @@ class SurveyController extends Controller
     public function destroy(Survey $survey)
     {
         $user = Auth()->user();
+
+        // Check if user authorized to perform destroy
         if ($user->id !== $survey->user_id)
         {
             return abort(403, 'Unauthorized action.');
