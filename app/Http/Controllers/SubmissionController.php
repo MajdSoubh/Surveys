@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SurveySubmitted;
 use App\Http\Requests\StoreAnswerRequest;
 use App\Http\Resources\AnswerResource;
 use App\Http\Resources\SubmissionResource;
@@ -51,6 +52,8 @@ class SubmissionController extends Controller
 
             Answer::create($data);
         }
+
+        event(new SurveySubmitted($submission));
         return response(new SubmissionResource($submission), 201);
     }
 }

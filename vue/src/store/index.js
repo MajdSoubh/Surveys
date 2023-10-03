@@ -4,7 +4,7 @@ import http from "../axios";
 const store = createStore({
     state: {
         user: {
-            data: {},
+            data: JSON.parse(sessionStorage.getItem("UserData") || "{}"),
             token: sessionStorage.getItem("TOKEN"),
         },
         dashboard: {
@@ -49,6 +49,38 @@ const store = createStore({
                     commit("setDashboardLoading", false);
                     throw err;
                 });
+        },
+        updateDashboardData({ commit, state }, { event, data }) {
+            const dashboard = state.dashboard.data;
+
+            switch (event) {
+                case "SurveySubmitted":
+                    // Check if the length of latestSubmission array equal 5 remove last one.
+                    if (dashboard?.latestSubmissions?.length == 5) {
+                        dashboard.latestSubmissions.pop();
+                    }
+                    // Insert new submission
+                    dashboard?.latestSubmissions.unshift(data);
+                    if (dashboard.totalSubmissions) {
+                        dashboard.totalSubmissions++;
+                    }
+
+                    // Check if submission belongs to the latest survey update latest survey data.
+                    if (dashboard?.latestSurvey.id == data.survey.id) {
+                        dashboard.latestSurvey = data.survey;
+                    }
+                    break;
+
+                case "SurveyCreated":
+                    if (dashboard.latestSurvey) {
+                        dashboard.latestSurvey = data;
+                    }
+                    if (dashboard.totalSurveys) {
+                        dashboard.totalSurveys++;
+                    }
+                    break;
+            }
+            commit("setDashboardData", dashboard);
         },
         fetchSurveys({ commit }, { url = null } = {}) {
             url = url || "/survey";
@@ -199,15 +231,18 @@ const store = createStore({
         setDashboardData: (state, data) => {
             state.dashboard.data = data;
         },
+
         logout: (state) => {
             state.user.data = {};
             state.user.token = null;
             sessionStorage.removeItem("TOKEN");
+            sessionStorage.removeItem("UserData");
         },
         setUser: (state, data) => {
             state.user.data = data.user;
             state.user.token = data.token;
             sessionStorage.setItem("TOKEN", data.token);
+            sessionStorage.setItem("UserData", JSON.stringify(data.user));
         },
 
         notify: (state, { type, message }) => {

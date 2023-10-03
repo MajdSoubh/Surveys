@@ -1,5 +1,9 @@
 <?php
 
+use App\Events\SurveySubmitted;
+use App\Models\Submission;
+use App\Models\Survey;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function ()
+{
     return view('welcome');
+});
+
+Route::get('/event', function ()
+{
+    auth()->login(User::find(1));
+    $s = Submission::find(1);
+    event(new SurveySubmitted($s));
 });

@@ -148,14 +148,14 @@
             >
                 <div
                     class="h-full flex flex-col gap-5"
-                    v-if="data.latestSubmission.length"
+                    v-if="data.latestSubmissions.length"
                 >
                     <h3 class="text-2xl font-medium">Latest Submissions</h3>
 
-                    <div class="flex flex-grow flex-col justify-between">
+                    <div class="flex flex-grow flex-col">
                         <div
                             href="#"
-                            v-for="submission of data.latestSubmission"
+                            v-for="submission of data.latestSubmissions"
                             :key="submission.id"
                         >
                             <router-link
@@ -195,8 +195,32 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
+
 const loading = computed(() => store.state.dashboard.loading);
 const data = computed(() => store.state.dashboard.data);
 
+// Retrieve all Dashboard data
 store.dispatch("getDashboardData");
+
+// Listen to new submitted surveys.
+Echo.private("survey." + store.state.user.data.id).listen(
+    ".SurveySubmitted",
+    (event) => {
+        store.dispatch("updateDashboardData", {
+            event: "SurveySubmitted",
+            data: event.submission,
+        });
+    }
+);
+
+// Listen to new created surveys.
+Echo.private("survey." + store.state.user.data.id).listen(
+    ".SurveyCreated",
+    (event) => {
+        store.dispatch("updateDashboardData", {
+            event: "SurveyCreated",
+            data: event.survey,
+        });
+    }
+);
 </script>

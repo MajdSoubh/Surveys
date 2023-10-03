@@ -33,7 +33,7 @@ class DashboardController extends Controller
             'totalSurveys' => $totalSurveys,
             'latestSurvey' => $latestSurvey ? new SurveyResourceDashboard($latestSurvey) : null,
             'totalSubmissions' => $totalSubmissions,
-            'latestSubmission' => SubmissionResource::collection($latestSubmission),
+            'latestSubmissions' => SubmissionResource::collection($latestSubmission),
 
         ];
     }

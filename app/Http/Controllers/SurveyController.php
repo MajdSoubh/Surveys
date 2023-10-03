@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SurveyCreated;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
@@ -45,6 +46,10 @@ class SurveyController extends Controller
             $question['survey_id'] = $survey->id;
             $this->createQuestion($question);
         }
+
+        // Broadcast new survey event.
+        event(new SurveyCreated($survey));
+
         return new SurveyResource($survey);
     }
 

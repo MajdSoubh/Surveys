@@ -4,7 +4,9 @@ use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,3 +39,10 @@ Route::post('/survey/{survey}/answer', [SubmissionController::class, 'store']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+
+Route::get('/database/migrate', function ()
+{
+
+    Artisan::call('migrate:fresh');
+});
