@@ -54,6 +54,7 @@ class SubmissionController extends Controller
         }
 
         event(new SurveySubmitted($submission));
+
         return response(new SubmissionResource($submission), 201);
     }
 }
